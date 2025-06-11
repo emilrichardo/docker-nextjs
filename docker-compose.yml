@@ -2,18 +2,20 @@ version: '3.9'
 
 services:
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: ${SUBDOMAIN}_web
+    image: node:18
+    container_name: keys_web
+    working_dir: /app
     volumes:
       - ${WEB_PATH}:/app
+    command: sh -c "npm install && npm run build && npm run start"
+    environment:
+      - NODE_ENV=production
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${SUBDOMAIN}.rule=Host(`${FULL_DOMAIN}`)"
-      - "traefik.http.routers.${SUBDOMAIN}.entrypoints=websecure"
-      - "traefik.http.routers.${SUBDOMAIN}.tls.certresolver=myresolver"
-      - "traefik.http.services.${SUBDOMAIN}.loadbalancer.server.port=${APP_PORT}"
+      - "traefik.http.routers.keys.rule=Host(`${FULL_DOMAIN}`)"
+      - "traefik.http.routers.keys.entrypoints=websecure"
+      - "traefik.http.routers.keys.tls.certresolver=letsencrypt"
+      - "traefik.http.services.keys.loadbalancer.server.port=${APP_PORT}"
     networks:
       - traefik
     restart: unless-stopped
