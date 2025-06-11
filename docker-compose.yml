@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ${SUBDOMAIN}_web
+    volumes:
+      - ${WEB_PATH}:/app
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${SUBDOMAIN}.rule=Host(`${FULL_DOMAIN}`)"
+      - "traefik.http.routers.${SUBDOMAIN}.entrypoints=websecure"
+      - "traefik.http.routers.${SUBDOMAIN}.tls.certresolver=myresolver"
+      - "traefik.http.services.${SUBDOMAIN}.loadbalancer.server.port=${APP_PORT}"
+    networks:
+      - traefik
+    restart: unless-stopped
+
+networks:
+  traefik:
+    external: true
