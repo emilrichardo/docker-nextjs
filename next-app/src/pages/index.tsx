@@ -12,7 +12,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to Keys Neuraz
+          Welcome to Keys Neuraz 2 ss
         </h1>
 
 

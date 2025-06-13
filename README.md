@@ -72,6 +72,9 @@ docker compose -f compose.prod.yaml build
 
 # Up prod in detached mode
 docker compose -f compose.prod.yaml up -d
+docker compose --env-file .env -f compose.prod.yaml logs next-app
+docker compose --env-file .env -f compose.prod.yaml build --no-cache
+
 ```
 
 Alternatively, run the production server without multistage builds (Final image approximately 1 GB).
